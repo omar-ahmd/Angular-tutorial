@@ -2,15 +2,21 @@
   <h1>Bootcamp Enrollement Form</h1>
   <form #userForm="ngForm">
 
-    {{userForm.value | json}}
+    <!--{{userForm.value | json}}
     <hr/>
-    {{userModel | json}}
+    {{userModel | json}}-->
+
 
 
     <div class="form-group">
       <label>Name:</label>
-      <input type="text" [(ngModel)]="userModel.name" name="name" class="form-control"/>
+      <input type="text" #name="ngModel" required [(ngModel)]="userModel.name" name="name" [class.is-invalid]="name.invalid && name.touched" class="form-control"/>
+      <small class="text-danger" [class.d-none]="name.valid || name.untouched">Name is required</small>
     </div>
+
+
+    {{name.value}}
+
 
     <div class="form-group">
       <label>Email:</label>
@@ -19,14 +25,22 @@
 
     <div class="form-group">
       <label>Phone:</label>
-      <input type="tel" [(ngModel)]="userModel.phone" name="tel" class="form-control"/>
+      <input type="tel" [(ngModel)]="userModel.phone" required #phone="ngModel" pattern="^\d{10}$" [class.is-invalid]="phone.invalid && phone.touched " name="tel" class="form-control"/>
+      
+
+      <div *ngIf="phone.errors && (phone.invalid && phone.touched)">
+        <small class="text-danger" *ngIf="phone.errors.pattern">Phone number must be 10 digits</small>
+        <small class="text-danger" *ngIf="phone.errors.required">Phone number is required</small>
+
+      </div>
     </div>
 
     <div class="form-group">
-      <select class="custom-select" [(ngModel)]="userModel.topic" name="custom">
+      <select required #topic="ngModel" [class.is-invalid]="topic.touched && topic.invalid" class="custom-select" [(ngModel)]="userModel.topic" name="custom">
         <option value="">I'm interested in</option>
         <option *ngFor="let topic of topics">{{topic}}</option>
       </select>
+      <small [class.d-none]="topic.valid || topic.untouched" class="text-danger">please select one topic</small>
     </div>
 
     <div class="mb-3">
@@ -48,7 +62,7 @@
       </label>
     </div>
 
-    <button class="btn btn-primary" >Submit form</button>
+    <button [disabled]="userForm.form.invalid" class="btn btn-primary" >Submit form</button>
 
   </form>
 </div>
