@@ -1,6 +1,6 @@
 <div class="container-fluid mb-5">
   <h1>Bootcamp Enrollement Form</h1>
-  <form #userForm="ngForm">
+  <form #userForm="ngForm" (ngSubmit)="OnSubmit()" *ngIf="!submitted" >
 
     <!--{{userForm.value | json}}
     <hr/>
